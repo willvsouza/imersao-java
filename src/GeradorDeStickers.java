@@ -1,15 +1,20 @@
 import javax.imageio.ImageIO;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 public class GeradorDeStickers {
 
     public void cria() throws IOException {
 
         // fazer a leitura da imagem
-        BufferedImage imagemOriginal = ImageIO.read(new File("entrada/filme.jpg"));
+        //InputStream inputStream = new FileInputStream(new File("entrada/filme.jpg"));
+        InputStream inputStream = new URL("https://m.media-amazon.com/images/M/MV5BNDE3ODcxYzMtY2YzZC00NmNlLWJiNDMtZDViZWM2MzIxZDYwXkEyXkFqcGdeQXVyNjAwNDUxODI@.jpg").openStream();
+        BufferedImage imagemOriginal = ImageIO.read(inputStream);
 
         // criar nova imagem em memória com transparência e redimensionada
         int largura = imagemOriginal.getWidth();
@@ -21,8 +26,13 @@ public class GeradorDeStickers {
         Graphics2D graphics = (Graphics2D) novaImagem.getGraphics();
         graphics.drawImage(imagemOriginal, 0, 0, null);
 
-        // escrever uma frase na nova imagem
+        // configurar a fonte
+        Font fonte = new Font(Font.SANS_SERIF, Font.BOLD, 64);
+        graphics.setColor(Color.YELLOW);
+        graphics.setFont(fonte);
 
+        // escrever uma frase na nova imagem
+        graphics.drawString("ME CHAMA PRA UMA IMERSÃO!!!", 10, novaAltura - 80);
 
         // escrever a nova imagem num arquivo
         ImageIO.write(novaImagem, "png", new File("saida/figurinha.png"));
