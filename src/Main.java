@@ -11,6 +11,13 @@ public class Main {
 
         // fazer uma conexão HTTP e buscar os top 250 filmes
         String url = "https://imdb-api.com/en/API/Top250Movies/k_63q3moh2";
+
+        // faz uma conexão HTTP e busca as top 250 séries de TV
+        //String url = "https://imdb-api.com/en/API/Top250TVs/k_63q3moh2";
+
+        // faz uma conexão HTTP e busca os filmes mais populares
+        //String url = "https://imdb-api.com/en/API/MostPopularMovies/k_63q3moh2";
+
         URI endereco = URI.create(url);
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder(endereco).GET().build();
@@ -21,11 +28,16 @@ public class Main {
         // pegar só os dados que interessam (título, poster e classificação)
         JsonParser parser = new JsonParser();
         List<Map<String, String>> listaDeFilmes = parser.parse(body);
-        System.out.println("Total de filmes retornados: "+listaDeFilmes.size());
-        System.out.println(listaDeFilmes.get(0));
+        //System.out.println("Total de filmes retornados: "+listaDeFilmes.size());
+        //System.out.println(listaDeFilmes.get(0));
 
         // exibir e manipular os dados
-
+        for (Map<String,String> filme : listaDeFilmes) {
+            System.out.println("Título: "+filme.get("title"));
+            System.out.println("URL do poster: "+filme.get("image"));
+            System.out.println("Classificação: "+filme.get("imDbRating"));
+            System.out.println();
+        }
     }
 
 }
