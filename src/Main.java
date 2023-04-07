@@ -3,6 +3,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.List;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -14,10 +16,13 @@ public class Main {
         HttpRequest request = HttpRequest.newBuilder(endereco).GET().build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         String body = response.body();
-        System.out.println(body);
+        //System.out.println(body);
 
         // pegar só os dados que interessam (título, poster e classificação)
-
+        JsonParser parser = new JsonParser();
+        List<Map<String, String>> listaDeFilmes = parser.parse(body);
+        System.out.println("Total de filmes retornados: "+listaDeFilmes.size());
+        System.out.println(listaDeFilmes.get(0));
 
         // exibir e manipular os dados
 
