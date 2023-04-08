@@ -9,11 +9,11 @@ import java.net.URL;
 
 public class GeradorDeStickers {
 
-    public void cria() throws IOException {
+    public void cria(InputStream inputStream, String nomeArquivo) throws IOException {
 
         // fazer a leitura da imagem
         //InputStream inputStream = new FileInputStream(new File("entrada/filme.jpg"));
-        InputStream inputStream = new URL("https://m.media-amazon.com/images/M/MV5BNDE3ODcxYzMtY2YzZC00NmNlLWJiNDMtZDViZWM2MzIxZDYwXkEyXkFqcGdeQXVyNjAwNDUxODI@.jpg").openStream();
+        //InputStream inputStream = new URL("https://m.media-amazon.com/images/M/MV5BNDE3ODcxYzMtY2YzZC00NmNlLWJiNDMtZDViZWM2MzIxZDYwXkEyXkFqcGdeQXVyNjAwNDUxODI@.jpg").openStream();
         BufferedImage imagemOriginal = ImageIO.read(inputStream);
 
         // criar nova imagem em memória com transparência e redimensionada
@@ -35,12 +35,8 @@ public class GeradorDeStickers {
         graphics.drawString("ME CHAMA PRA UMA IMERSÃO!!!", 10, novaAltura - 80);
 
         // escrever a nova imagem num arquivo
-        ImageIO.write(novaImagem, "png", new File("saida/figurinha.png"));
+        ImageIO.write(novaImagem, "png", new File(nomeArquivo));
 
     }
 
-    public static void main(String[] args) throws IOException {
-        GeradorDeStickers geradora = new GeradorDeStickers();
-        geradora.cria();
-    }
 }

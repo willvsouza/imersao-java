@@ -1,5 +1,7 @@
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -32,9 +34,17 @@ public class Main {
         //System.out.println(listaDeFilmes.get(0));
 
         // exibir e manipular os dados
+        GeradorDeStickers geradora = new GeradorDeStickers();
         for (Map<String,String> filme : listaDeFilmes) {
-            System.out.println("Título: "+filme.get("title"));
-            System.out.println("URL do poster: "+filme.get("image"));
+
+            String urlImagem = filme.get("image");
+            String titulo = filme.get("title");
+            String nomeArquivo = titulo + ".png";
+
+            InputStream inputStream = new URL(urlImagem).openStream();
+
+            geradora.cria(inputStream, nomeArquivo);
+
             System.out.println("Classificação: "+filme.get("imDbRating"));
             System.out.println();
         }
