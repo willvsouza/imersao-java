@@ -1,5 +1,9 @@
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.font.TextLayout;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,12 +31,34 @@ public class GeradorDeStickers {
         graphics.drawImage(imagemOriginal, 0, 0, null);
 
         // configurar a fonte
-        Font fonte = new Font(Font.SANS_SERIF, Font.BOLD, 64);
+        Font fonte = new Font(Font.SANS_SERIF, Font.BOLD, 80);
         graphics.setColor(Color.YELLOW);
         graphics.setFont(fonte);
 
         // escrever uma frase na nova imagem
-        graphics.drawString("ME CHAMA PRA UMA IMERSÃO!!!", 10, novaAltura - 80);
+        String texto = "Filme TOP!";
+        FontMetrics fontMetrics = graphics.getFontMetrics();
+        Rectangle2D retangulo = fontMetrics.getStringBounds(texto, graphics);
+        int larguraTexto = (int) retangulo.getWidth();
+        int posicaoTextoX = (largura - larguraTexto) / 2;
+        int posicaoTextoY = novaAltura - 60;
+        graphics.drawString(texto, posicaoTextoX, posicaoTextoY);
+
+        // faz o contorno no texto
+        FontRenderContext fontRenderContext = graphics.getFontRenderContext();
+        TextLayout textLayout = new TextLayout(texto, fonte, fontRenderContext);
+
+        Shape outline = textLayout.getOutline(null);
+        AffineTransform transform = graphics.getTransform();
+        transform.translate(posicaoTextoX, posicaoTextoY);
+        graphics.setTransform(transform);
+
+        BasicStroke outlineStroke = new BasicStroke(largura * 0.004f);
+        graphics.setStroke(outlineStroke);
+
+        graphics.setColor(Color.BLACK);
+        graphics.draw(outline);
+        graphics.setClip(outline);
 
         // escrever a nova imagem num arquivo
         ImageIO.write(novaImagem, "png", new File(nomeArquivo));

@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -33,19 +34,25 @@ public class Main {
         //System.out.println("Total de filmes retornados: "+listaDeFilmes.size());
         //System.out.println(listaDeFilmes.get(0));
 
+        // cria a pasta "diretorio" se ela já não existir
+        File diretorio = new File("posters/");
+        diretorio.mkdir();
+
         // exibir e manipular os dados
         GeradorDeStickers geradora = new GeradorDeStickers();
         for (Map<String,String> filme : listaDeFilmes) {
 
-            String urlImagem = filme.get("image");
+            // ajusta a url da imagem para acessar a versão em maior qualidade
+            String urlImagemPequena = filme.get("image");
+            String urlImagem = urlImagemPequena.replace("._V1_UX128_CR0,12,128,176_AL_", "");
+
             String titulo = filme.get("title");
-            String nomeArquivo = titulo + ".png";
+            String nomeArquivo = "posters/" + titulo + ".png";
 
             InputStream inputStream = new URL(urlImagem).openStream();
-
             geradora.cria(inputStream, nomeArquivo);
 
-            System.out.println("Classificação: "+filme.get("imDbRating"));
+            System.out.println("Título: "+filme.get("title"));
             System.out.println();
         }
     }
