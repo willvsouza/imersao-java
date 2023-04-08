@@ -13,7 +13,7 @@ import java.net.URL;
 
 public class GeradorDeStickers {
 
-    public void cria(InputStream inputStream, String nomeArquivo) throws IOException {
+    public void cria(InputStream inputStream, String nomeArquivo, String texto, InputStream inputStreamSobreposicao) throws IOException {
 
         // fazer a leitura da imagem
         //InputStream inputStream = new FileInputStream(new File("entrada/filme.jpg"));
@@ -30,13 +30,17 @@ public class GeradorDeStickers {
         Graphics2D graphics = (Graphics2D) novaImagem.getGraphics();
         graphics.drawImage(imagemOriginal, 0, 0, null);
 
+        // extraindo a imagem para sobreposição
+        BufferedImage imagemSobreposicao = ImageIO.read(inputStreamSobreposicao);
+        int posicaoImagemSobreposicaoY = novaAltura -imagemSobreposicao.getHeight();
+        graphics.drawImage(imagemSobreposicao, 0, posicaoImagemSobreposicaoY, null);
+
         // configurar a fonte
         Font fonte = new Font(Font.SANS_SERIF, Font.BOLD, 80);
         graphics.setColor(Color.YELLOW);
         graphics.setFont(fonte);
 
         // escrever uma frase na nova imagem
-        String texto = "Filme TOP!";
         FontMetrics fontMetrics = graphics.getFontMetrics();
         Rectangle2D retangulo = fontMetrics.getStringBounds(texto, graphics);
         int larguraTexto = (int) retangulo.getWidth();
