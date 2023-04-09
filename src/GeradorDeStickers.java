@@ -16,8 +16,6 @@ public class GeradorDeStickers {
     public void cria(InputStream inputStream, String nomeArquivo, String texto, InputStream inputStreamSobreposicao) throws IOException {
 
         // fazer a leitura da imagem
-        //InputStream inputStream = new FileInputStream(new File("entrada/filme.jpg"));
-        //InputStream inputStream = new URL("https://m.media-amazon.com/images/M/MV5BNDE3ODcxYzMtY2YzZC00NmNlLWJiNDMtZDViZWM2MzIxZDYwXkEyXkFqcGdeQXVyNjAwNDUxODI@.jpg").openStream();
         BufferedImage imagemOriginal = ImageIO.read(inputStream);
 
         // criar nova imagem em memória com transparência e redimensionada
@@ -66,7 +64,5 @@ public class GeradorDeStickers {
 
         // escrever a nova imagem num arquivo
         ImageIO.write(novaImagem, "png", new File(nomeArquivo));
-
     }
-
 }

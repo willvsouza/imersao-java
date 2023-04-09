@@ -17,75 +17,36 @@ public class Main {
         // fazer uma conexão HTTP e buscar os top 250 filmes
         //String url = "https://raw.githubusercontent.com/alura-cursos/imersao-java-2-api/main/TopMovies.json"; // usando endereço alternativo
         //String url = "https://imdb-api.com/en/API/Top250Movies/k_63q3moh2";
+        //ExtratorDeConteudoDoIMDB extrator = new ExtratorDeConteudoDoIMDB();
 
-        // faz uma conexão HTTP e busca as top 250 séries de TV
-        //String url = "https://imdb-api.com/en/API/Top250TVs/k_63q3moh2";
+        // faz uma conexão HTTP e busca imagens da NASA
+        String url = "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&start_date=2022-06-12&end_date=2022-06-14";
+        ExtratorDeConteudoDaNasa extrator = new ExtratorDeConteudoDaNasa();
 
-        // faz uma conexão HTTP e busca os filmes mais populares
-        String url = "https://raw.githubusercontent.com/alura-cursos/imersao-java-2-api/main/MostPopularMovies.json";
-        //String url = "https://imdb-api.com/en/API/MostPopularMovies/k_63q3moh2";
-
-        URI endereco = URI.create(url);
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder(endereco).GET().build();
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        String body = response.body();
-        //System.out.println(body);
-
-        // pegar só os dados que interessam (título, poster e classificação)
-        JsonParser parser = new JsonParser();
-        List<Map<String, String>> listaDeConteudos = parser.parse(body);
-        //System.out.println("Total de conteúdos retornados: "+listaDeConteudos.size());
-        //System.out.println(listaDeConteudos.get(0));
+        ClienteHttp http = new ClienteHttp();
+        String json = http.buscaDados(url);
 
         // cria a pasta "diretorio" se ela já não existir
         File diretorio = new File("posters/");
         diretorio.mkdir();
 
         // exibir e manipular os dados
+        List<Conteudo> conteudos = extrator.extraiConteudos(json);
+
         GeradorDeStickers geradora = new GeradorDeStickers();
 
-        //limitando em 10 conteúdos para agilizar os testes
-        for (int i = 0; i < 10; i++) {
-          var conteudo = listaDeConteudos.get(i);
+        //limitando em 2 conteúdos para agilizar os testes
+        for (int i = 0; i < 3; i++) {
 
-        //for (Map<String,String> conteudo : listaDeConteudos) {
+            Conteudo conteudo = conteudos.get(i);
 
-            // ajusta a url da imagem para acessar a versão em maior qualidade
-            String urlImagem = conteudo.get("image");
-            String urlImagemMaior = urlImagem.replaceFirst("(@\\.)([0-9A-Z,_]+).jpg$", "");
-            //String urlImagemMaior = urlImagem.replace("._V1_UX128_CR0,12,128,176_AL_", "");
+            InputStream inputStream = new URL(conteudo.getUrlImagem()).openStream();
+            String nomeArquivo = "posters/" + conteudo.getTitulo() + ".png";
+            InputStream inputStreamSobreposicao = new FileInputStream(new File("sobreposicao/top.png"));;
 
-            String titulo = conteudo.get("title");
+            geradora.cria(inputStream, nomeArquivo, "TESTE", inputStreamSobreposicao);
 
-            // criei esta verificação pros casos de filmes que estávam sem um imDbRanting
-            Double classificacao;
-            if (conteudo.get("imDbRating") == "") {
-                classificacao = 0.0;;
-            } else {
-                classificacao = Double.parseDouble(conteudo.get("imDbRating"));
-            }
-
-            // altera o textoPoster de acordo com a classificação do ImDBRanting
-            String textoPoster;
-            InputStream imagemPessoa;
-            if (classificacao >= 8.0) {
-                textoPoster = "FILME TOP!";
-                imagemPessoa = new FileInputStream(new File("sobreposicao/top.png"));
-            } else if (classificacao >= 6.0) {
-                textoPoster = "FILME BOM";
-                imagemPessoa = new FileInputStream(new File("sobreposicao/bom.png"));
-            } else {
-                textoPoster = "MELHOR ESCOLHER OUTRO...";
-                imagemPessoa = new FileInputStream(new File("sobreposicao/ruim.png"));
-            }
-
-            String nomeArquivo = "posters/" + titulo + ".png";
-            InputStream inputStream = new URL(urlImagemMaior).openStream();
-
-            geradora.cria(inputStream, nomeArquivo, textoPoster, imagemPessoa);
-
-            System.out.println("Título -> "+conteudo.get("title"));
+            System.out.println("Título -> "+conteudo.getTitulo());
             System.out.println();
         }
     }
