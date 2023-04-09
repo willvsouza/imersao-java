@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class ExtratorDeConteudoDoIMDB {
+public class ExtratorDeConteudoDoIMDB implements ExtratorDeConteudo {
 
     public List<Conteudo> extraiConteudos(String json) throws FileNotFoundException {
 
@@ -44,7 +44,7 @@ public class ExtratorDeConteudoDoIMDB {
                 imagemPessoa = new FileInputStream(new File("sobreposicao/ruim.png"));
             }
 
-            Conteudo conteudo = new Conteudo(titulo, urlImagem);
+            Conteudo conteudo = new Conteudo(titulo, urlImagem, textoPoster, imagemPessoa);
 
             conteudos.add(conteudo);
         }

@@ -13,7 +13,7 @@ import java.net.URL;
 
 public class GeradorDeStickers {
 
-    public void cria(InputStream inputStream, String nomeArquivo, String texto, InputStream inputStreamSobreposicao) throws IOException {
+    public void cria(InputStream inputStream, String nomeArquivo, String texto, InputStream Imagem) throws IOException {
 
         // fazer a leitura da imagem
         BufferedImage imagemOriginal = ImageIO.read(inputStream);
@@ -29,6 +29,7 @@ public class GeradorDeStickers {
         graphics.drawImage(imagemOriginal, 0, 0, null);
 
         // extraindo a imagem para sobreposição
+        InputStream inputStreamSobreposicao = new FileInputStream(new File("sobreposicao/bom.png"));
         BufferedImage imagemSobreposicao = ImageIO.read(inputStreamSobreposicao);
         int posicaoImagemSobreposicaoY = novaAltura -imagemSobreposicao.getHeight();
         graphics.drawImage(imagemSobreposicao, 0, posicaoImagemSobreposicaoY, null);

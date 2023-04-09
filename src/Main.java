@@ -17,11 +17,11 @@ public class Main {
         // fazer uma conexão HTTP e buscar os top 250 filmes
         //String url = "https://raw.githubusercontent.com/alura-cursos/imersao-java-2-api/main/TopMovies.json"; // usando endereço alternativo
         //String url = "https://imdb-api.com/en/API/Top250Movies/k_63q3moh2";
-        //ExtratorDeConteudoDoIMDB extrator = new ExtratorDeConteudoDoIMDB();
+        //ExtratorDeConteudo extrator = new ExtratorDeConteudoDoIMDB();
 
         // faz uma conexão HTTP e busca imagens da NASA
         String url = "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&start_date=2022-06-12&end_date=2022-06-14";
-        ExtratorDeConteudoDaNasa extrator = new ExtratorDeConteudoDaNasa();
+        ExtratorDeConteudo extrator = new ExtratorDeConteudoDaNasa();
 
         ClienteHttp http = new ClienteHttp();
         String json = http.buscaDados(url);
@@ -42,9 +42,9 @@ public class Main {
 
             InputStream inputStream = new URL(conteudo.getUrlImagem()).openStream();
             String nomeArquivo = "posters/" + conteudo.getTitulo() + ".png";
-            InputStream inputStreamSobreposicao = new FileInputStream(new File("sobreposicao/top.png"));;
+            InputStream inputStreamSobreposicao = new FileInputStream(new File("sobreposicao/bom.png"));
 
-            geradora.cria(inputStream, nomeArquivo, "TESTE", inputStreamSobreposicao);
+            geradora.cria(inputStream, nomeArquivo, conteudo.getTitulo(), inputStreamSobreposicao);
 
             System.out.println("Título -> "+conteudo.getTitulo());
             System.out.println();
