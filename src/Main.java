@@ -34,9 +34,9 @@ public class Main {
 
         // pegar só os dados que interessam (título, poster e classificação)
         JsonParser parser = new JsonParser();
-        List<Map<String, String>> listaDeFilmes = parser.parse(body);
-        //System.out.println("Total de filmes retornados: "+listaDeFilmes.size());
-        //System.out.println(listaDeFilmes.get(0));
+        List<Map<String, String>> listaDeConteudos = parser.parse(body);
+        //System.out.println("Total de conteúdos retornados: "+listaDeConteudos.size());
+        //System.out.println(listaDeConteudos.get(0));
 
         // cria a pasta "diretorio" se ela já não existir
         File diretorio = new File("posters/");
@@ -45,25 +45,25 @@ public class Main {
         // exibir e manipular os dados
         GeradorDeStickers geradora = new GeradorDeStickers();
 
-        //limitando em 5 filmes para agilizar os testes
-        for (int i = 0; i < 5; i++) {
-          var filme = listaDeFilmes.get(i);
+        //limitando em 10 conteúdos para agilizar os testes
+        for (int i = 0; i < 10; i++) {
+          var conteudo = listaDeConteudos.get(i);
 
-        //for (Map<String,String> filme : listaDeFilmes) {
+        //for (Map<String,String> conteudo : listaDeConteudos) {
 
             // ajusta a url da imagem para acessar a versão em maior qualidade
-            String urlImagem = filme.get("image");
+            String urlImagem = conteudo.get("image");
             String urlImagemMaior = urlImagem.replaceFirst("(@\\.)([0-9A-Z,_]+).jpg$", "");
             //String urlImagemMaior = urlImagem.replace("._V1_UX128_CR0,12,128,176_AL_", "");
 
-            String titulo = filme.get("title");
+            String titulo = conteudo.get("title");
 
             // criei esta verificação pros casos de filmes que estávam sem um imDbRanting
             Double classificacao;
-            if (filme.get("imDbRating") == "") {
+            if (conteudo.get("imDbRating") == "") {
                 classificacao = 0.0;;
             } else {
-                classificacao = Double.parseDouble(filme.get("imDbRating"));
+                classificacao = Double.parseDouble(conteudo.get("imDbRating"));
             }
 
             // altera o textoPoster de acordo com a classificação do ImDBRanting
@@ -85,7 +85,7 @@ public class Main {
 
             geradora.cria(inputStream, nomeArquivo, textoPoster, imagemPessoa);
 
-            System.out.println("Título -> "+filme.get("title"));
+            System.out.println("Título -> "+conteudo.get("title"));
             System.out.println();
         }
     }
