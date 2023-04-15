@@ -1,14 +1,20 @@
 package br.com.alura.linguagens.api;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 @RestController
 public class LinguagemController {
 
-    @GetMapping(value = "/linguagem-preferida")
-    public String processaLinguagemPreferida() {
-        return "Oi, Java!";
+    @Autowired
+    private LinguagemRepository repositorio;
+
+    @GetMapping("/linguagens") // a propriedade da anotação @ "value=" pode ser suprimida, deixando apenas seu valor
+    public List<Linguagem> obterLinguagens() {
+        List<Linguagem> linguagens = repositorio.findAll();
+        return linguagens;
     }
 
 }
