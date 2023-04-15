@@ -2,6 +2,7 @@ package br.com.alura.linguagens.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -15,14 +16,14 @@ public class LinguagemController {
 
     @GetMapping("/linguagens") // a propriedade da anotação @ "value=" pode ser suprimida, deixando apenas seu valor
     public List<Linguagem> obterLinguagens() {
-        List<Linguagem> linguagens = repositorio.findAll();
+        List<Linguagem> linguagens = repositorio.findByOrderByRanking();
         return linguagens;
     }
 
     @PostMapping("/linguagens")
-    public Linguagem cadastrarLinguagem(@RequestBody Linguagem linguagem) {
+    public ResponseEntity<Linguagem> cadastrarLinguagem(@RequestBody Linguagem linguagem) {
         Linguagem linguagemSalva = repositorio.save(linguagem);
-        return linguagemSalva;
+        return new ResponseEntity<>(linguagemSalva, HttpStatus.CREATED);
     }
 
     @GetMapping("/linguagens/{id}")
